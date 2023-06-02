@@ -26,6 +26,7 @@ public class UserServiceImp implements IUserService {
         return userRepository.findAll();
     }
     @Override
+
     public User addUser(User u) {
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         return userRepository.save(u);
