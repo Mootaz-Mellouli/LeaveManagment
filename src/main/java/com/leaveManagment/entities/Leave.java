@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "conge")
 public class Leave {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
