@@ -25,5 +25,5 @@ public class Claim {
     private ClaimStatus claimStatus;
     private boolean feedBackEmployee;
     @ManyToOne
-    private User user;
+    private User userClaim;
 }
