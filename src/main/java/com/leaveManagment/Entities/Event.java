@@ -1,0 +1,27 @@
+package com.leaveManagment.Entities;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Event {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String eventTitle;
+    private Date dateEvent;
+    @Enumerated(EnumType.STRING)
+    private EventType eventType;
+    private String description;
+    @ManyToOne
+    private TimeSheet timeSheet;
+}
