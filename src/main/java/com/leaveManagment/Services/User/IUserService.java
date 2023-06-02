@@ -19,4 +19,5 @@ public interface IUserService {
     void deleteUser(Integer idUser);
     List<Leave> getLeavesByUser(Integer idUser);
     LoginMessage loginUser(LoginDTO loginDTO);
+    User getCurrentUser();
 }

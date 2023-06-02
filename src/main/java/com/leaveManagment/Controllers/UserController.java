@@ -1,9 +1,12 @@
 package com.leaveManagment.Controllers;
 
+import com.leaveManagment.Dto.LoginDTO;
 import com.leaveManagment.Entities.Leave;
 import com.leaveManagment.Entities.User;
+import com.leaveManagment.LoginMessage;
 import com.leaveManagment.Services.User.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,5 +33,10 @@ public class UserController {
     @GetMapping("/retrieveLeavesByUser/{user-id}")
     public List<Leave> retrieveLeavesByTeam(@PathVariable("user-id") Integer userId) {
         return iUserService.getLeavesByUser(userId);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO){
+        LoginMessage loginMessage = iUserService.loginUser(loginDTO);
+        return ResponseEntity.ok(loginMessage);
     }
 }

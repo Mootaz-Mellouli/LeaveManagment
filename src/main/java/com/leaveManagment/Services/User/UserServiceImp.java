@@ -6,6 +6,7 @@ import com.leaveManagment.Entities.User;
 import com.leaveManagment.LoginMessage;
 import com.leaveManagment.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -26,7 +27,6 @@ public class UserServiceImp implements IUserService {
         return userRepository.findAll();
     }
     @Override
-
     public User addUser(User u) {
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         return userRepository.save(u);
@@ -50,6 +50,11 @@ public class UserServiceImp implements IUserService {
         List<Leave> leaves = new ArrayList<>();
         user.getLeaves().forEach(leave -> leaves.add(leave) );
         return leaves;
+    }
+    public User getCurrentUser() {
+        return ((User) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal());
     }
     @Override
     public LoginMessage loginUser(LoginDTO loginDTO) {
