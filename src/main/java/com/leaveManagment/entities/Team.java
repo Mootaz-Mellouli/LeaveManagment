@@ -21,6 +21,6 @@ public class Team {
     private String description;
     @ManyToMany
     private List<User> userList;
-    @OneToOne
-    private TimeSheet timeSheet;
+    @OneToMany(mappedBy = "team")
+    private List<Event> eventList;
 }
