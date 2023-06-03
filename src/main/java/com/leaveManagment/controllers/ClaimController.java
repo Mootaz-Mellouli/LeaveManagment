@@ -2,12 +2,8 @@ package com.leaveManagment.controllers;
 
 import com.leaveManagment.entities.Claim;
 import com.leaveManagment.entities.ClaimPriority;
-
-import com.leaveManagment.entities.User;
 import com.leaveManagment.services.Claim.ClaimService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
