@@ -23,5 +23,5 @@ public class Event {
     private EventType eventType;
     private String description;
     @ManyToOne
-    private TimeSheet timeSheet;
+    private Team team;
 }
