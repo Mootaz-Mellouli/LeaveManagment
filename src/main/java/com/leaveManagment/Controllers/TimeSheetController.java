@@ -22,12 +22,12 @@ public class TimeSheetController {
         return timeSheetService.retrieveTimeSheet(TimeSheetId);
     }
 
-    @PostMapping()
+    @PostMapping("/")
     public void addTimeSheet(@RequestBody TimeSheet timeSheet) {
         timeSheetService.addTimeSheet(timeSheet);
     }
 
-    @PutMapping()
+    @PutMapping("/")
     public TimeSheet updateTimeSheet(@RequestBody TimeSheet timeSheet) {
         return timeSheetService.updateTimeSheet(timeSheet);
     }

@@ -1,7 +1,7 @@
 package com.leaveManagment.services.Leave;
 
-import com.leaveManagment.entities.Leave;
-import com.leaveManagment.repositories.LeaveRepository;
+import com.leaveManagment.Entities.Leave;
+import com.leaveManagment.Repositories.LeaveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

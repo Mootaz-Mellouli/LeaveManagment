@@ -1,4 +1,4 @@
-package com.leaveManagment.Services.User;
+package com.leaveManagment.services.User;
 
 import com.leaveManagment.Dto.LoginDTO;
 import com.leaveManagment.Entities.Leave;

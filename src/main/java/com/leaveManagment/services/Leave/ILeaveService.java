@@ -1,6 +1,6 @@
 package com.leaveManagment.services.Leave;
 
-import com.leaveManagment.entities.Leave;
+import com.leaveManagment.Entities.Leave;
 
 import java.util.List;
 

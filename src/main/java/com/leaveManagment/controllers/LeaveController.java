@@ -1,6 +1,6 @@
 package com.leaveManagment.controllers;
 
-import com.leaveManagment.entities.Leave;
+import com.leaveManagment.Entities.Leave;
 import com.leaveManagment.services.Leave.ILeaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

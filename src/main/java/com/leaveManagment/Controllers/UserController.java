@@ -1,10 +1,10 @@
-package com.leaveManagment.Controllers;
+package com.leaveManagment.controllers;
 
 import com.leaveManagment.Dto.LoginDTO;
 import com.leaveManagment.Entities.Leave;
 import com.leaveManagment.Entities.User;
 import com.leaveManagment.LoginMessage;
-import com.leaveManagment.Services.User.IUserService;
+import com.leaveManagment.services.User.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,17 +21,17 @@ public class UserController {
     public List<User> retrieveAllUsers (){return iUserService.retrieveAllUsers();}
     @GetMapping("/{user-id}")
     public User retrieveUser(@PathVariable("user-id") Integer userId) { return iUserService.retrieveUser(userId);}
-    @PostMapping()
+    @PostMapping("/addUser")
     public User addUser(@RequestBody User user) { return iUserService.addUser(user); }
 
-    @PutMapping()
+    @PutMapping("/updateUser")
     public User updateTeam(@RequestBody User user) {return iUserService.updateUser(user);}
 
-    @DeleteMapping("/{user-id}")
-    public void removeUser(@PathVariable("user-id") Integer userId) {iUserService.deleteUser(userId);}
+    @DeleteMapping("/{user-idUser}")
+    public void removeUser(@PathVariable("user-idUser") Integer userId) {iUserService.deleteUser(userId);}
 
-    @GetMapping("/retrieveLeavesByUser/{user-id}")
-    public List<Leave> retrieveLeavesByTeam(@PathVariable("user-id") Integer userId) {
+    @GetMapping("/retrieveLeavesByUser/{userid}")
+    public List<Leave> retrieveLeavesByTeam(@PathVariable("userid") Integer userId) {
         return iUserService.getLeavesByUser(userId);
     }
     @PostMapping("/login")
