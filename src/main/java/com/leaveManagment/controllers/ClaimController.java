@@ -1,20 +1,48 @@
 package com.leaveManagment.controllers;
 
 import com.leaveManagment.Entities.Claim;
-import com.leaveManagment.Entities.ClaimPriority;
+import com.leaveManagment.Entities.User;
 import com.leaveManagment.services.Claim.ClaimService;
+import com.leaveManagment.services.Claim.IClaimService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/claim")
 @AllArgsConstructor
-public class ClaimController {
+public class ClaimController{
     private final ClaimService claimService;
 
-    @PostMapping("/addClaim/{idUser}")
-    public Claim addClaimAndAssginToUser(@RequestBody Claim claim, @PathVariable int idUser) {
-        return claimService.addClaimAndAssginToUser(claim,idUser);
+    @DeleteMapping("/deleteClaim")
+    public void deleteClaim(@PathVariable int idClaim) {
+        claimService.deleteClaim(idClaim);
+    }
+
+    @PutMapping("/updateClaim/{idUser}")
+    public Claim updateClaim(@RequestBody Claim claim, @PathVariable int idUser) {
+        return claimService.updateClaim(claim,idUser);
+    }
+
+    @PostMapping("/addClaim")
+    public Claim addClaimAndAssginToUser(@RequestBody Claim claim) {
+        return claimService.addClaimAndAssginToUser(claim);
+    }
+
+    @GetMapping("/getAllClaim")
+    public List<Claim> getAllClaim() {
+        return claimService.getAllClaim();
+    }
+
+    /* @PostMapping("/sendMail")
+     public String sendEmail(String to, String cc, String subject, String body){
+         return claimService.sendEmail(to,cc,subject,body);
+     }*/
+    @PostMapping("/sendMail")
+    public String sendEmail(User user, String subject, String body){
+        return claimService.sendEmail(user,subject,body);
     }
 
    /* @GetMapping("/getStatut/{idUser}")
