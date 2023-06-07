@@ -1,6 +1,8 @@
 package com.leaveManagment.controllers;
 
 import com.leaveManagment.Entities.Claim;
+import com.leaveManagment.Entities.ClaimPriority;
+import com.leaveManagment.Entities.Team;
 import com.leaveManagment.Entities.User;
 import com.leaveManagment.services.Claim.ClaimService;
 import com.leaveManagment.services.Claim.IClaimService;
@@ -45,8 +47,13 @@ public class ClaimController{
         return claimService.sendEmail(user,subject,body);
     }
 
-   /* @GetMapping("/getStatut/{idUser}")
-    public String  getClaimByStatus(@PathVariable Integer idUser,@RequestBody ClaimPriority claimPriority){
-        return claimService.getClaimByStatus(idUser,claimPriority);
-   }*/
+    @GetMapping("/count")
+    public int countClaimByTeam(@RequestBody Team team) {
+        return claimService.countClaimByTeam(team);
+    }
+
+    @GetMapping("/getPriority/{claimPriority}")
+    public List<Claim>  getClaimByPriority(@PathVariable("claimPriority") ClaimPriority claimPriority){
+        return claimService.getClaimByPriority(claimPriority);
+   }
 }

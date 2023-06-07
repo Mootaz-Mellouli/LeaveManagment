@@ -1,7 +1,5 @@
 package com.leaveManagment.services.Claim;
-import com.leaveManagment.Entities.Claim;
-import com.leaveManagment.Entities.Role;
-import com.leaveManagment.Entities.User;
+import com.leaveManagment.Entities.*;
 import com.leaveManagment.Repositories.UserRepository;
 import com.leaveManagment.Repositories.ClaimRepository;
 import com.leaveManagment.services.User.UserServiceImp;
@@ -27,11 +25,11 @@ public class ClaimService implements IClaimService {
     private final UserRepository userRepo;
     private final JavaMailSender javaMailSender;
 
-    @Override
+    /*@Override
     public Claim addClaim(Claim claim) {
 
         return claimRepository.save(claim);
-    }
+    }*/
 
     @Override
     public void deleteClaim(int idClaim) {
@@ -94,10 +92,24 @@ public class ClaimService implements IClaimService {
        }
     }
 
-   /* @Override
-    public String getClaimByStatus(Integer idUser, ClaimPriority claimPriority) {
-        User user=userRepo.findById(idUser).orElse(null);
-        return claimRepository.findClaimByClaimPriorityAndUser(claimPriority,user);
-    }*/
+    @Override
+    public int countClaimByTeam(Team team) {
+        List<Claim> allClaims = claimRepository.findAll();
+        int count = 0;
+        for (Claim claim : allClaims) {
+            User userClaim = claim.getUserClaim();
+            for (Team userTeam : userClaim.getTeamList()) {
+                if (userTeam.getNameTeam().equals(team.getNameTeam())) {
+                    count++;
+                    break;
+                }
+            }
+        }
+        return count;
+    }
 
+    @Override
+    public List<Claim> getClaimByPriority(ClaimPriority claimPriority) {
+     return claimRepository.findClaimByClaimPriority(claimPriority);
+    }
 }
