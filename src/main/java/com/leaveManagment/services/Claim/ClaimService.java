@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.internet.MimeMessage;
@@ -32,13 +33,18 @@ public class ClaimService implements IClaimService {
     }*/
 
     @Override
-    public void deleteClaim(int idClaim) {
-        claimRepository.deleteById(idClaim);
+    public void deleteClaim(int idClaim, ClaimStatus claimStatus) {
+        Claim claim = claimRepository.findById(idClaim).orElse(null);
+        if (claim != null && claim.getClaimStatus() == ClaimStatus.ON_HOLD) {
+            claimRepository.deleteById(idClaim);
+        } else {
+            throw new IllegalStateException("The claim can only be deleted if its status is 'ON_HOLD'.");
+        }
     }
 
     @Override
     public Claim updateClaim(Claim claim, int idUser) {
-        User user=userRepo.findById(idUser).orElse(null);
+        User user=userRepo.findById(idUser).orElseThrow(() -> new IllegalArgumentException("user not found with this id "+idUser));
         claim.setUserClaim(user);
         return claimRepository.save(claim);
     }
@@ -56,6 +62,8 @@ public class ClaimService implements IClaimService {
         currentUser.setPassword("bicha1234");
         currentUser.setMatricule("AAN");
         currentUser.setRole(Role.ADMIN);
+
+        Assert.isNull(currentUser,"User not found or unauthorized");
 
         if (currentUser != null ) {
             claim.setUserClaim(currentUser);
@@ -107,7 +115,6 @@ public class ClaimService implements IClaimService {
         }
         return count;
     }
-
     @Override
     public List<Claim> getClaimByPriority(ClaimPriority claimPriority) {
      return claimRepository.findClaimByClaimPriority(claimPriority);

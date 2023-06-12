@@ -1,9 +1,6 @@
 package com.leaveManagment.controllers;
 
-import com.leaveManagment.Entities.Claim;
-import com.leaveManagment.Entities.ClaimPriority;
-import com.leaveManagment.Entities.Team;
-import com.leaveManagment.Entities.User;
+import com.leaveManagment.Entities.*;
 import com.leaveManagment.services.Claim.ClaimService;
 import com.leaveManagment.services.Claim.IClaimService;
 import lombok.AllArgsConstructor;
@@ -18,9 +15,9 @@ import java.util.List;
 public class ClaimController{
     private final ClaimService claimService;
 
-    @DeleteMapping("/deleteClaim")
-    public void deleteClaim(@PathVariable int idClaim) {
-        claimService.deleteClaim(idClaim);
+    @DeleteMapping("/deleteClaim/{idClaim}")
+    public void deleteClaim(@PathVariable int idClaim, @RequestParam ClaimStatus claimStatus) {
+        claimService.deleteClaim(idClaim,claimStatus);
     }
 
     @PutMapping("/updateClaim/{idUser}")
@@ -48,7 +45,7 @@ public class ClaimController{
     }
 
     @GetMapping("/count")
-    public int countClaimByTeam(@RequestBody Team team) {
+    public int countClaimByTeam( Team team) {
         return claimService.countClaimByTeam(team);
     }
 
