@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/leave")
 public class LeaveController {
     private final ILeaveService leaveService;
-    @GetMapping
+    @GetMapping("/all")
     public List<Leave> getAllLeaves() {
         return leaveService.getAllLeaves();
     }
@@ -31,5 +31,9 @@ public class LeaveController {
     @DeleteMapping("/delete/{idLeave}")
     public void deleteLeave(@PathVariable int idLeave) {
         leaveService.deleteLeave(idLeave);
+    }
+    @GetMapping
+    public List<Leave> getAllLeavesNotArchived() {
+        return leaveService.getAllLeavesNotArchived();
     }
 }

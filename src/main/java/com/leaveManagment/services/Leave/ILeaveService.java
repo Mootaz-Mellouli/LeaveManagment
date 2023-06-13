@@ -1,6 +1,7 @@
 package com.leaveManagment.services.Leave;
 
 import com.leaveManagment.entities.Leave;
+import com.leaveManagment.entities.LeaveStatus;
 
 import java.util.List;
 
@@ -10,4 +11,7 @@ public interface ILeaveService {
     Leave addLeave(Leave leave);
     Leave updateLeave(Leave leave);
     void deleteLeave(int idLeave);
+    List<Leave> getLeavesByUser(int idUser);
+    Boolean leaveResponse(int idLeave, LeaveStatus leaveStatus);
+    List<Leave> getAllLeavesNotArchived();
 }
