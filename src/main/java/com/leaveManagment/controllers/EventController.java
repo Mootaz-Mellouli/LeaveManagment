@@ -1,9 +1,8 @@
 package com.leaveManagment.controllers;
 
-import com.leaveManagment.entities.Leave;
 import com.leaveManagment.entities.Event;
 import com.leaveManagment.services.Event.IEventService;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +25,6 @@ public class EventController {
 
     @PostMapping()
     public void addEvent(@RequestBody Event event) {
-
         eventService.addEvent(event);
     }
 
@@ -36,8 +34,8 @@ public class EventController {
     }
 
     @DeleteMapping("/{eventid}")
-    public void removeEvent(@PathVariable("eventid") Integer eventId) {
-        eventService.deleteEvent(eventId);
+    public void archiveEvent(@PathVariable("eventid") Integer eventId) {
+        eventService.archiveEvent(eventId);
     }
 
     @PutMapping("/{eventid}/{teamid}")

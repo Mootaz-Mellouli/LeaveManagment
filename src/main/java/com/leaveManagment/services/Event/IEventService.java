@@ -14,7 +14,7 @@ public interface IEventService {
 
     Event retrieveEvent (Integer idEEvent);
 
-    void deleteEvent(Integer idEvent);
+    void archiveEvent(Integer idEvent);
     void affectEventToTeam(Integer idEvent,Integer idTeam);
     void desaffectEventFromTeam(Integer idEvent);
     List<Event> getEventByTeam(Integer idTeam);

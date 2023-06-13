@@ -4,8 +4,7 @@ import com.leaveManagment.entities.Event;
 import com.leaveManagment.entities.Team;
 import com.leaveManagment.repositories.EventRepository;
 import com.leaveManagment.repositories.TeamRepository;
-import com.leaveManagment.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -40,8 +39,12 @@ public class EventServiceImp implements IEventService {
     }
 
     @Override
-    public void deleteEvent(Integer idEvent) {
-        eventRepository.deleteById(idEvent);
+    @Transactional
+    public void archiveEvent(Integer idEvent) {
+        Event event = eventRepository.findById(idEvent).orElse(null);
+        Assert.notNull(event,"Event ne doit pas etre null");
+        event.setArchive(true);
+        eventRepository.save(event);
     }
 
     @Override
