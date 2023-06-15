@@ -1,5 +1,6 @@
 package com.leaveManagment.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,12 @@ public class Team {
     private int id;
     private String nameTeam;
     private String description;
+    private boolean archive;
     @ManyToMany
     private List<User> userList;
+    @OneToOne
+    private User user;
     @OneToMany(mappedBy = "team")
+    @JsonIgnore
     private List<Event> eventList;
 }

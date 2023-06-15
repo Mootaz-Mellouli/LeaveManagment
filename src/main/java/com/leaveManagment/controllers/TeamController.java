@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/team")
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 public class TeamController {
     private final ITeamService teamService;
     @GetMapping()
@@ -36,8 +36,8 @@ public class TeamController {
     }
 
     @DeleteMapping("/{team-id}")
-    public void removeTeam(@PathVariable("team-id") Integer teamId) {
-        teamService.deleteTeam(teamId);
+    public void archiveTeam(@PathVariable("team-id") Integer teamId) {
+        teamService.archiveTeam(teamId);
     }
 
     @PutMapping("/{user-id}/{team-id}")

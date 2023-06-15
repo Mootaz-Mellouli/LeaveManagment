@@ -15,7 +15,7 @@ public interface ITeamService {
 
     Team retrieveTeam (Integer idETeam);
 
-    void deleteTeam(Integer idTeam);
+    void archiveTeam(Integer idTeam);
     void affectUserToTeam(Integer idUser,Integer idTeam);
     void desaffectUserFromTeam(Integer idUser,Integer idTeam);
     List<Leave> getLeavesByTeam(Integer idTeam);
