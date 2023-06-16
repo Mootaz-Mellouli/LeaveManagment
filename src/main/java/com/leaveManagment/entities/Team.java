@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,7 @@ public class Team {
     private String nameTeam;
     private String description;
     private boolean archive;
+    private Date createdOn;
     @ManyToMany
     private List<User> userList;
     @OneToOne
