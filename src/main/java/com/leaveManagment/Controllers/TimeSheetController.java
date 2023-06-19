@@ -1,7 +1,7 @@
-package com.leaveManagment.Controllers;
+package com.leaveManagment.controllers;
 
-import com.leaveManagment.Entities.TimeSheet;
-import com.leaveManagment.Services.TimeSheet.ITimeSheetService;
+import com.leaveManagment.entities.TimeSheet;
+import com.leaveManagment.services.TimeSheet.ITimeSheetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.leaveManagment.Entities;
+package com.leaveManagment.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -17,8 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     private String matricule;
     private String firstName;
     private String lastName;

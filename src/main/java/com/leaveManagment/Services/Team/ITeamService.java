@@ -1,7 +1,7 @@
-package com.leaveManagment.Services.Team;
+package com.leaveManagment.services.Team;
 
-import com.leaveManagment.Entities.Leave;
-import com.leaveManagment.Entities.Team;
+import com.leaveManagment.entities.Leave;
+import com.leaveManagment.entities.Team;
 
 import java.util.List;
 

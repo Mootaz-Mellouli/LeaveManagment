@@ -1,4 +1,4 @@
-package com.leaveManagment.Entities;
+package com.leaveManagment.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,24 +6,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Claim {
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String eventTitle;
+    private Date dateEvent;
+    @Enumerated(EnumType.STRING)
+    private EventType eventType;
     private String description;
-    @Enumerated(EnumType.STRING)
-    private ClaimPriority claimPriority;
-    private Date dateClaim;
-    @Enumerated(EnumType.STRING)
-    private ClaimStatus claimStatus;
-    private boolean feedBackEmployee;
     @ManyToOne
-    private User userClaim;
+    private TimeSheet timeSheet;
 }

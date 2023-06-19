@@ -1,4 +1,4 @@
-package com.leaveManagment.Entities;
+package com.leaveManagment.entities;
 
 import java.util.Date;
 

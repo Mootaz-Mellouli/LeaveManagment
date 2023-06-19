@@ -1,4 +1,4 @@
-package com.leaveManagment.Dto;
+package com.leaveManagment.dto;
 
 import lombok.*;
 

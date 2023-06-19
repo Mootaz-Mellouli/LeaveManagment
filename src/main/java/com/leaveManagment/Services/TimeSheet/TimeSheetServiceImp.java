@@ -1,8 +1,8 @@
-package com.leaveManagment.Services.TimeSheet;
+package com.leaveManagment.services.TimeSheet;
 
 
-import com.leaveManagment.Entities.TimeSheet;
-import com.leaveManagment.Repositories.TimeSheetRepository;
+import com.leaveManagment.entities.TimeSheet;
+import com.leaveManagment.repositories.TimeSheetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

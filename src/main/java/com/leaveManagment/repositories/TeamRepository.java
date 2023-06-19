@@ -1,6 +1,6 @@
-package com.leaveManagment.Repositories;
+package com.leaveManagment.repositories;
 
-import com.leaveManagment.Entities.Team;
+import com.leaveManagment.entities.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TeamRepository extends JpaRepository<Team, Integer> {
