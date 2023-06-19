@@ -5,14 +5,11 @@ import com.leaveManagment.Repositories.ClaimRepository;
 import com.leaveManagment.services.User.UserServiceImp;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.mail.internet.MimeMessage;
 import java.util.List;
@@ -53,30 +50,27 @@ public class ClaimService implements IClaimService {
     public List<Claim> getAllClaim() {
         return claimRepository.findAll();
     }
+
     @Override
     public Claim addClaimAndAssginToUser(Claim claim) {
-        // User currentUser = userService.getCurrentUser();
-        User currentUser =new User();
-        currentUser.setIdUser(2);
-        currentUser.setEmail("amdouniamani777@gmail.com");
-        currentUser.setPassword("bicha1234");
-        currentUser.setMatricule("AAN");
-        currentUser.setRole(Role.ADMIN);
+        User currentUser = userService.getCurrentUser();
+       // User currentUser =new User();
+       // currentUser.setIdUser(2);
+       // currentUser.setEmail("amdouniamani777@gmail.com");
+       // currentUser.setPassword("bicha1234");
+       // currentUser.setMatricule("AAN");
+        // currentUser.setRole(Role.ADMIN);
 
-        Assert.isNull(currentUser,"User not found or unauthorized");
+        Assert.notNull(currentUser, "User not found or unauthorized");
 
-        if (currentUser != null ) {
-            claim.setUserClaim(currentUser);
-            Claim savedClaim=claimRepository.save(claim);
+        claim.setUserClaim(currentUser);
+        Claim savedClaim=claimRepository.save(claim);
 
-            Role role = currentUser.getRole();
+        Role role = currentUser.getRole();
             if (role == Role.ADMIN || role == Role.SUPER_ADMIN) {
                 sendEmail(currentUser, "New Claim Added", claim.getDescription());
             }
             return savedClaim;
-        } else {
-            throw new RuntimeException("User not found or unauthorized");
-        }
     }
     @Value("${spring.mail.username}")
     private String fromEmail;
@@ -85,8 +79,7 @@ public class ClaimService implements IClaimService {
        try {
            MimeMessage mimeMessage=javaMailSender.createMimeMessage();
            MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(mimeMessage,true);
-           mimeMessageHelper.setFrom(user.getEmail());
-           // supposons que cette email est l'email de  ADMIN
+           mimeMessageHelper.setFrom("amdouniamani777@gmail.com");
            mimeMessageHelper.setTo(fromEmail);
            mimeMessageHelper.setSubject(subject);
            mimeMessageHelper.setText(body);

@@ -26,11 +26,13 @@ public class ClaimController{
     }
 
     @PostMapping("/addClaim")
+    @CrossOrigin
     public Claim addClaimAndAssginToUser(@RequestBody Claim claim) {
         return claimService.addClaimAndAssginToUser(claim);
     }
 
     @GetMapping("/getAllClaim")
+    @CrossOrigin
     public List<Claim> getAllClaim() {
         return claimService.getAllClaim();
     }
