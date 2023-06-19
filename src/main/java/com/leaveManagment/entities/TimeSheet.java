@@ -1,5 +1,6 @@
-package com.leaveManagment.Entities;
+package com.leaveManagment.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,14 +14,14 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Team {
+public class TimeSheet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String nameTeam;
-    private String description;
-    @ManyToMany
-    private List<User> userList;
-    @OneToOne
-    private TimeSheet timeSheet;
+    @OneToOne(mappedBy = "timeSheet")
+    @JsonIgnore
+    private Team team;
+    @OneToMany(mappedBy = "timeSheet")
+    @JsonIgnore
+    private List<Event> event;
 }

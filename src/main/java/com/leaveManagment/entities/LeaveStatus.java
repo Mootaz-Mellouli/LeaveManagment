@@ -1,4 +1,4 @@
-package com.leaveManagment.Entities;
+package com.leaveManagment.entities;
 
 public enum LeaveStatus {
     IN_PROGRESS,

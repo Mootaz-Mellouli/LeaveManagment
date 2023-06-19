@@ -1,10 +1,10 @@
-package com.leaveManagment.Services.Team;
+package com.leaveManagment.services.Team;
 
-import com.leaveManagment.Entities.Leave;
-import com.leaveManagment.Entities.Team;
-import com.leaveManagment.Entities.User;
-import com.leaveManagment.Repositories.TeamRepository;
-import com.leaveManagment.Repositories.UserRepository;
+import com.leaveManagment.entities.Leave;
+import com.leaveManagment.entities.Team;
+import com.leaveManagment.entities.User;
+import com.leaveManagment.repositories.TeamRepository;
+import com.leaveManagment.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

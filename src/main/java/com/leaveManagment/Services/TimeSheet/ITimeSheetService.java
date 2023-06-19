@@ -1,6 +1,6 @@
-package com.leaveManagment.Services.TimeSheet;
+package com.leaveManagment.services.TimeSheet;
 
-import com.leaveManagment.Entities.TimeSheet;
+import com.leaveManagment.entities.TimeSheet;
 
 import java.util.List;
 

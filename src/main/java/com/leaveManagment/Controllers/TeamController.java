@@ -1,8 +1,8 @@
-package com.leaveManagment.Controllers;
+package com.leaveManagment.controllers;
 
-import com.leaveManagment.Entities.Leave;
-import com.leaveManagment.Entities.Team;
-import com.leaveManagment.Services.Team.ITeamService;
+import com.leaveManagment.entities.Leave;
+import com.leaveManagment.entities.Team;
+import com.leaveManagment.services.Team.ITeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

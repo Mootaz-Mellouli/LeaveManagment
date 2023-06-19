@@ -1,15 +1,16 @@
-package com.leaveManagment.Services.User;
+package com.leaveManagment.services.User;
 
-import com.leaveManagment.Dto.LoginDTO;
-import com.leaveManagment.Entities.Leave;
-import com.leaveManagment.Entities.User;
+import com.leaveManagment.dto.LoginDTO;
+import com.leaveManagment.entities.Leave;
+import com.leaveManagment.entities.User;
 import com.leaveManagment.LoginMessage;
-import com.leaveManagment.Repositories.UserRepository;
+import com.leaveManagment.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import java.util.UUID;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,8 @@ public class UserServiceImp implements IUserService {
     }
     @Override
     public User addUser(User u) {
+        Assert.notNull(u,"User is empty");
+        u.setMatricule(generateMatricule());
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         return userRepository.save(u);
     }
@@ -36,17 +39,18 @@ public class UserServiceImp implements IUserService {
         return userRepository.save(u);
     }
     @Override
-    public User retrieveUser(Integer idUser) {
-        return userRepository.findById(idUser).orElse(null);
+    public User retrieveUser(String matricule) {
+        return userRepository.findUserByMatricule(matricule);
     }
     @Override
-    public void deleteUser(Integer idUser) {
-        userRepository.deleteById(idUser);
+    public void deleteUser(String matricule) {
+        Assert.notNull(matricule,"idUser is empty");
+        userRepository.deleteUserByMatricule(matricule);
     }
     @Override
-    public List<Leave> getLeavesByUser(Integer idUser) {
-        User user = userRepository.findById(idUser).orElse(null);
-        Assert.notNull(user,"User must be null");
+    public List<Leave> getLeavesByUser(String matricule) {
+        User user = userRepository.findUserByMatricule(matricule);
+        Assert.notNull(user,"User must be not null");
         List<Leave> leaves = new ArrayList<>();
         user.getLeaves().forEach(leave -> leaves.add(leave) );
         return leaves;
@@ -76,5 +80,11 @@ public class UserServiceImp implements IUserService {
         }else {
             return new LoginMessage("Matricule not exits", false);
         }
+    }
+    private String generateMatricule() {
+        String uniqueId = UUID.randomUUID().toString();
+        String matricule = "user" + uniqueId;
+
+        return matricule;
     }
 }

@@ -1,12 +1,11 @@
-package com.leaveManagment.Controllers;
+package com.leaveManagment.controllers;
 
-import com.leaveManagment.Dto.LoginDTO;
-import com.leaveManagment.Entities.Leave;
-import com.leaveManagment.Entities.User;
-import com.leaveManagment.LoginMessage;
-import com.leaveManagment.Services.User.IUserService;
+
+import com.leaveManagment.entities.Leave;
+import com.leaveManagment.entities.User;
+import com.leaveManagment.services.User.IUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,24 +18,20 @@ public class UserController {
     private final IUserService iUserService;
     @GetMapping()
     public List<User> retrieveAllUsers (){return iUserService.retrieveAllUsers();}
-    @GetMapping("/{user-id}")
-    public User retrieveUser(@PathVariable("user-id") Integer userId) { return iUserService.retrieveUser(userId);}
+    @GetMapping("/{matricule-id}")
+    public User retrieveUser(@PathVariable("matricule-id") String matricule) { return iUserService.retrieveUser(matricule);}
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public User addUser(@RequestBody User user) { return iUserService.addUser(user); }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping()
     public User updateTeam(@RequestBody User user) {return iUserService.updateUser(user);}
-
-    @DeleteMapping("/{user-id}")
-    public void removeUser(@PathVariable("user-id") Integer userId) {iUserService.deleteUser(userId);}
-
-    @GetMapping("/retrieveLeavesByUser/{user-id}")
-    public List<Leave> retrieveLeavesByTeam(@PathVariable("user-id") Integer userId) {
-        return iUserService.getLeavesByUser(userId);
-    }
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO){
-        LoginMessage loginMessage = iUserService.loginUser(loginDTO);
-        return ResponseEntity.ok(loginMessage);
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{matricule-id}")
+    public void removeUser(@PathVariable("matricule-id") String matricule) {iUserService.deleteUser(matricule);}
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/retrieveLeavesByUser/{matricule-id}")
+    public List<Leave> retrieveLeavesByTeam(@PathVariable("matricule-id") String matricule) {
+        return iUserService.getLeavesByUser(matricule);
     }
 }

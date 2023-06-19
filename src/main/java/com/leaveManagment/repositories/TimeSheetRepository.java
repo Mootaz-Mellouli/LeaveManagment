@@ -1,6 +1,6 @@
-package com.leaveManagment.Repositories;
+package com.leaveManagment.repositories;
 
-import com.leaveManagment.Entities.TimeSheet;
+import com.leaveManagment.entities.TimeSheet;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TimeSheetRepository extends JpaRepository<TimeSheet, Integer> {
