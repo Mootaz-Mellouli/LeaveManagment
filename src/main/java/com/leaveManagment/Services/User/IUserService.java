@@ -1,9 +1,9 @@
 package com.leaveManagment.services.User;
 
+import com.leaveManagment.dto.AuthResponseDTO;
 import com.leaveManagment.dto.LoginDTO;
 import com.leaveManagment.entities.Leave;
 import com.leaveManagment.entities.User;
-import com.leaveManagment.LoginMessage;
 
 import java.util.List;
 
@@ -18,6 +18,6 @@ public interface IUserService {
 
     void deleteUser(String matricule);
     List<Leave> getLeavesByUser(String matricule);
-    LoginMessage loginUser(LoginDTO loginDTO);
+    AuthResponseDTO loginUser(LoginDTO loginDTO);
     User getCurrentUser();
 }

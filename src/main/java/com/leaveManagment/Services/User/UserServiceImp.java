@@ -1,20 +1,28 @@
 package com.leaveManagment.services.User;
 
+import com.leaveManagment.config.JWTGenerator;
+import com.leaveManagment.dto.AuthResponseDTO;
 import com.leaveManagment.dto.LoginDTO;
 import com.leaveManagment.entities.Leave;
+import com.leaveManagment.entities.Role;
 import com.leaveManagment.entities.User;
-import com.leaveManagment.LoginMessage;
 import com.leaveManagment.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
 import java.util.UUID;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +30,15 @@ public class UserServiceImp implements IUserService {
 
     private final UserRepository userRepository;
 
+    private final AuthenticationManager authenticationManager;
+
     private final PasswordEncoder passwordEncoder;
+
+    private final JWTGenerator jwtGenerator;
+
+
+    @Value("${matricule.length}")
+    private int matriculeLength;
     @Override
     public List<User> retrieveAllUsers() {
         return userRepository.findAll();
@@ -30,8 +46,21 @@ public class UserServiceImp implements IUserService {
     @Override
     public User addUser(User u) {
         Assert.notNull(u,"User is empty");
+        User user = userRepository.findUserByMatricule(u.getMatricule()).orElse(null);
+        Assert.notNull(user,"This user already exists");
+        // Validate the password strength
+        String password = u.getPassword();
+        Assert.notNull(password, "Password is empty");
+        Assert.isTrue(password.length() >= 12, "Password must be at least 12 characters long");
+        Assert.isTrue(password.matches(".*[A-Z].*"), "Password must contain at least one uppercase letter");
+        Assert.isTrue(password.matches(".*[a-z].*"), "Password must contain at least one lowercase letter");
+        Assert.isTrue(password.matches(".*\\d.*"), "Password must contain at least one digit");
+        Assert.isTrue(password.matches(".*[\\W_].*"), "Password must contain at least one special character");
+
+        // Set the user's matricule and encode the password
         u.setMatricule(generateMatricule());
         u.setPassword(passwordEncoder.encode(u.getPassword()));
+
         return userRepository.save(u);
     }
     @Override
@@ -40,7 +69,7 @@ public class UserServiceImp implements IUserService {
     }
     @Override
     public User retrieveUser(String matricule) {
-        return userRepository.findUserByMatricule(matricule);
+        return userRepository.findUserByMatricule(matricule).orElse(null);
     }
     @Override
     public void deleteUser(String matricule) {
@@ -49,7 +78,7 @@ public class UserServiceImp implements IUserService {
     }
     @Override
     public List<Leave> getLeavesByUser(String matricule) {
-        User user = userRepository.findUserByMatricule(matricule);
+        User user = userRepository.findUserByMatricule(matricule).orElse(null);
         Assert.notNull(user,"User must be not null");
         List<Leave> leaves = new ArrayList<>();
         user.getLeaves().forEach(leave -> leaves.add(leave) );
@@ -61,28 +90,19 @@ public class UserServiceImp implements IUserService {
                 .getPrincipal());
     }
     @Override
-    public LoginMessage loginUser(LoginDTO loginDTO) {
-        User user = userRepository.findUserByMatricule(loginDTO.getMatricule());
-        if (user != null) {
-            String password = loginDTO.getPassword();
-            String encodedPassword = user.getPassword();
-            Boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
-            if (isPwdRight) {
-                Optional<User> user1 = Optional.ofNullable(userRepository.findUserByMatriculeAndPassword(loginDTO.getMatricule(), encodedPassword));
-                if (user1.isPresent()) {
-                    return new LoginMessage("Login Success", true);
-                } else {
-                    return new LoginMessage("Login Failed", false);
-                }
-            } else {
-                return new LoginMessage("password Not Match", false);
-            }
-        }else {
-            return new LoginMessage("Matricule not exits", false);
-        }
+    public AuthResponseDTO loginUser(LoginDTO loginDTO) {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginDTO.getMatricule(),
+                            loginDTO.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println(authentication);
+            String token = jwtGenerator.generateToken(authentication);
+            return new AuthResponseDTO(token);
     }
     private String generateMatricule() {
         String uniqueId = UUID.randomUUID().toString();
+        String shortId = uniqueId.substring(0, matriculeLength);
         String matricule = "user" + uniqueId;
 
         return matricule;

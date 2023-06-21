@@ -15,20 +15,27 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin
 public class UserController {
+
     private final IUserService iUserService;
+
     @GetMapping()
     public List<User> retrieveAllUsers (){return iUserService.retrieveAllUsers();}
+
     @GetMapping("/{matricule-id}")
     public User retrieveUser(@PathVariable("matricule-id") String matricule) { return iUserService.retrieveUser(matricule);}
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public User addUser(@RequestBody User user) { return iUserService.addUser(user); }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping()
     public User updateTeam(@RequestBody User user) {return iUserService.updateUser(user);}
+
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{matricule-id}")
     public void removeUser(@PathVariable("matricule-id") String matricule) {iUserService.deleteUser(matricule);}
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/retrieveLeavesByUser/{matricule-id}")
     public List<Leave> retrieveLeavesByTeam(@PathVariable("matricule-id") String matricule) {
