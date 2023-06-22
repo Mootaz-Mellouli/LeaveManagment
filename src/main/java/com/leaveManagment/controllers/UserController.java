@@ -20,4 +20,13 @@ public class UserController {
     public List<User> retrieveAllUsers (){
         return userService.retrieveAllUsers();
     }
+    @PostMapping()
+    public void addUser(@RequestBody User user) {
+        userService.addUser(user);
+    }
+
+    @PutMapping()
+    public User updateUser(@RequestBody User user) {
+        return userService.updateUser(user);
+    }
 }

@@ -26,4 +26,15 @@ public class UserServiceImp implements IUserService {
     public List<User> retrieveAllUsers() {
         return userRepository.findAll();
     }
+
+    @Override
+    public void addUser(User u) {
+        userRepository.save(u);
+    }
+
+    @Override
+    public User updateUser(User u) {
+        return userRepository.save(u);
+    }
+
 }
