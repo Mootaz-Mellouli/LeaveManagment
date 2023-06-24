@@ -8,7 +8,7 @@ import java.util.List;
 public interface IClaimService {
     // public Claim addClaim(Claim claim);
     public void deleteClaim(int idClaim, ClaimStatus claimStatus);
-    public Claim updateClaim(Claim claim, int idUser);
+    public Claim updateClaim(Claim claim, int idClaim);
      public List<Claim>  getClaimByPriority(ClaimPriority claimPriority);
     public Claim addClaimAndAssginToUser(Claim claim);
     public List<Claim> getAllClaim();

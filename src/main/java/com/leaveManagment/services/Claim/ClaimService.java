@@ -31,19 +31,27 @@ public class ClaimService implements IClaimService {
 
     @Override
     public void deleteClaim(int idClaim, ClaimStatus claimStatus) {
-        Claim claim = claimRepository.findById(idClaim).orElse(null);
+        Claim claim = claimRepository.findById(idClaim).orElseThrow(() -> new IllegalArgumentException("Claim not found with this ID: " + idClaim));
         if (claim != null && claim.getClaimStatus() == ClaimStatus.ON_HOLD) {
             claimRepository.deleteById(idClaim);
         } else {
-            throw new IllegalStateException("The claim can only be deleted if its status is 'ON_HOLD'.");
+            throw new IllegalArgumentException("The claim can only be deleted if it's status is 'ON_HOLD'.");
         }
     }
 
     @Override
-    public Claim updateClaim(Claim claim, int idUser) {
-        User user=userRepo.findById(idUser).orElseThrow(() -> new IllegalArgumentException("user not found with this id "+idUser));
-        claim.setUserClaim(user);
-        return claimRepository.save(claim);
+    public Claim updateClaim(Claim claim, int idClaim) {
+        Claim existingClaim = claimRepository.findById(idClaim)
+                .orElseThrow(() -> new IllegalArgumentException("Claim not found with this ID: " + idClaim));
+
+        // Update the properties of the existing claim with the values from the updated claim
+        existingClaim.setClaimPriority(claim.getClaimPriority());
+        existingClaim.setClaimStatus(claim.getClaimStatus());
+        existingClaim.setDateClaim(claim.getDateClaim());
+        existingClaim.setDescription(claim.getDescription());
+        existingClaim.setFeedBackEmployee(claim.isFeedBackEmployee());
+
+        return claimRepository.save(existingClaim);
     }
 
     @Override
@@ -53,13 +61,13 @@ public class ClaimService implements IClaimService {
 
     @Override
     public Claim addClaimAndAssginToUser(Claim claim) {
-        User currentUser = userService.getCurrentUser();
-       // User currentUser =new User();
-       // currentUser.setIdUser(2);
-       // currentUser.setEmail("amdouniamani777@gmail.com");
-       // currentUser.setPassword("bicha1234");
-       // currentUser.setMatricule("AAN");
-        // currentUser.setRole(Role.ADMIN);
+        //User currentUser = userService.getCurrentUser();
+        User currentUser =new User();
+        currentUser.setIdUser(2);
+        currentUser.setEmail("amdouniamani777@gmail.com");
+        currentUser.setPassword("bicha1234");
+        currentUser.setMatricule("AAN");
+        currentUser.setRole(Role.ADMIN);
 
         Assert.notNull(currentUser, "User not found or unauthorized");
 
