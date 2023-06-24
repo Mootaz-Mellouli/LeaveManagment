@@ -16,11 +16,12 @@ public class ClaimController{
     private final ClaimService claimService;
 
     @DeleteMapping("/deleteClaim/{idClaim}")
+    @CrossOrigin
     public void deleteClaim(@PathVariable int idClaim, @RequestParam ClaimStatus claimStatus) {
         claimService.deleteClaim(idClaim,claimStatus);
     }
 
-    @PutMapping("/updateClaim/{idUser}")
+    @PutMapping("/updateClaim")
     public Claim updateClaim(@RequestBody Claim claim, @PathVariable int idUser) {
         return claimService.updateClaim(claim,idUser);
     }
