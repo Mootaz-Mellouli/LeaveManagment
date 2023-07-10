@@ -34,13 +34,17 @@ public class JWTGenerator {
     }
 
     public boolean validateToken(String token) {
+        if (token == null || token.isEmpty() || !token.contains(".")) {
+            return false;
+        }
         try {
             Jwts.parser()
                     .setSigningKey(SecurityConstants.SECRET)
                     .parseClaimsJws(token);
             return true;
         } catch (Exception ex) {
-            throw new AuthenticationCredentialsNotFoundException("JWT was exprired or incorrect",ex.fillInStackTrace());
+            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect", ex.fillInStackTrace());
         }
     }
+
 }
