@@ -25,8 +25,10 @@ public class Team {
     private Date createdOn;
     @ManyToMany
     private List<User> userList;
+
     @OneToOne
     private User user;
+
     @OneToMany(mappedBy = "team")
     @JsonIgnore
     private List<Event> eventList;

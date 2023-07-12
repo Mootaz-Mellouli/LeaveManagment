@@ -22,6 +22,7 @@ public class Event {
     @Enumerated(EnumType.STRING)
     private EventType eventType;
     private String description;
+    private boolean archive;
     @ManyToOne
     private Team team;
 }
