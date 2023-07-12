@@ -47,7 +47,7 @@ public class UserServiceImp implements IUserService {
     public User addUser(User u) {
         Assert.notNull(u,"User is empty");
         User user = userRepository.findUserByMatricule(u.getMatricule()).orElse(null);
-        Assert.isNull(user,"This user already exists");
+        Assert.notNull(user,"This user already exists");
         // Validate the password strength
         String password = u.getPassword();
         Assert.notNull(password, "Password is empty");
@@ -91,15 +91,14 @@ public class UserServiceImp implements IUserService {
     }
     @Override
     public AuthResponseDTO loginUser(LoginDTO loginDTO) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDTO.getMatricule(),
-                        loginDTO.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println(authentication);
-        String token = jwtGenerator.generateToken(authentication);
-        User user = userRepository.findUserByMatricule(loginDTO.getMatricule()).orElse(null);
-        return new AuthResponseDTO(user ,token);
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginDTO.getMatricule(),
+                            loginDTO.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println(authentication);
+            String token = jwtGenerator.generateToken(authentication);
+            return new AuthResponseDTO(token);
     }
     private String generateMatricule() {
         String uniqueId = UUID.randomUUID().toString();
