@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -17,8 +19,6 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     private String matricule;
     private String firstName;
     private String lastName;
@@ -33,6 +33,8 @@ public class User {
     private String phoneSecondary;
     private String email;
     private String password;
+    private Boolean isArchive = false ;
+    private LocalDate archiveDate ;
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Leave> leaves;
