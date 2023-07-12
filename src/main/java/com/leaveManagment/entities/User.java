@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -32,6 +33,8 @@ public class User {
     private String phoneSecondary;
     private String email;
     private String password;
+    private Boolean isArchive = false ;
+    private LocalDate archiveDate ;
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Leave> leaves;

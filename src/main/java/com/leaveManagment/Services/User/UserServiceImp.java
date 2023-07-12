@@ -9,12 +9,14 @@ import com.leaveManagment.entities.User;
 import com.leaveManagment.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.time.LocalDate;
 import java.util.UUID;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,7 +43,8 @@ public class UserServiceImp implements IUserService {
     private int matriculeLength;
     @Override
     public List<User> retrieveAllUsers() {
-        return userRepository.findAll();
+        System.out.println(userRepository.findAllByIsArchiveFalse());
+        return userRepository.findAllByIsArchiveFalse();
     }
     @Override
     public User addUser(User u) {
@@ -73,8 +76,11 @@ public class UserServiceImp implements IUserService {
     }
     @Override
     public void deleteUser(String matricule) {
-        Assert.notNull(matricule,"idUser is empty");
-        userRepository.deleteUserByMatricule(matricule);
+        User user = userRepository.findUserByMatricule(matricule).orElse(null);
+        Assert.notNull(user,"User is empty");
+        user.setIsArchive(true);
+        user.setArchiveDate(LocalDate.now());
+        userRepository.save(user);
     }
     @Override
     public List<Leave> getLeavesByUser(String matricule) {
@@ -101,10 +107,18 @@ public class UserServiceImp implements IUserService {
             User user = userRepository.findUserByMatricule(loginDTO.getMatricule()).orElse(null);
             return new AuthResponseDTO(user ,token);
     }
+    @Scheduled(cron = "0 0 0 * * *") // Exécuter une fois par jour à minuit
+    public void performAutoDelete() {
+        LocalDate oneYearAgo = LocalDate.now().minusYears(1);
+        List<User> usersToArchive = userRepository.findUsersByArchiveDateBefore(oneYearAgo);
+        for (User user : usersToArchive) {
+            userRepository.delete(user);
+        }
+    }
     private String generateMatricule() {
         String uniqueId = UUID.randomUUID().toString();
         String shortId = uniqueId.substring(0, matriculeLength);
-        String matricule = "user" + uniqueId;
+        String matricule = "user-" + shortId;
 
         return matricule;
     }
