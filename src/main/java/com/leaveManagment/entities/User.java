@@ -38,9 +38,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Leave> leaves;
-    @ManyToMany(mappedBy = "userList")
-    @JsonIgnore
-    private List<Team> teamList;
+    @ManyToOne
+    private Team teamUser;
     @OneToMany(mappedBy = "userClaim")
     @JsonIgnore
     private List<Claim> claim;

@@ -17,14 +17,14 @@ import java.util.List;
 public class UserController {
 
     private final IUserService iUserService;
-
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping()
     public List<User> retrieveAllUsers (){return iUserService.retrieveAllUsers();}
 
     @GetMapping("/{matricule-id}")
     public User retrieveUser(@PathVariable("matricule-id") String matricule) { return iUserService.retrieveUser(matricule);}
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping()
     public User addUser(@RequestBody User user) { return iUserService.addUser(user); }
 

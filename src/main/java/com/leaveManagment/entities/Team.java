@@ -23,7 +23,8 @@ public class Team {
     private String description;
     private boolean archive;
     private Date createdOn;
-    @ManyToMany
+    @OneToMany(mappedBy = "teamUser")
+    @JsonIgnore
     private List<User> userList;
     @OneToOne
     private User user;

@@ -28,6 +28,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
                 .csrf().disable()
+                .cors()
+                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
@@ -35,7 +37,8 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(AUTH_WHITELIST).permitAll()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers(AUTH_WHITELIST).authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
@@ -54,6 +57,6 @@ public class SecurityConfig {
     }
     private static final String[] AUTH_WHITELIST = {
             // welcome test rest endpoints
-            "/api/auth/**","/user/**"
+            "/user/**","/team/**"
     };
 }
