@@ -30,7 +30,7 @@ public class ClaimService implements IClaimService {
     }*/
 
     @Override
-    public void deleteClaim(int idClaim, ClaimStatus claimStatus) {
+    public void deleteClaim(int idClaim) {
         Claim claim = claimRepository.findById(idClaim).orElseThrow(() -> new IllegalArgumentException("Claim not found with this ID: " + idClaim));
         if (claim != null && claim.getClaimStatus() == ClaimStatus.ON_HOLD) {
             claimRepository.deleteById(idClaim);
@@ -40,18 +40,8 @@ public class ClaimService implements IClaimService {
     }
 
     @Override
-    public Claim updateClaim(Claim claim, int idClaim) {
-        Claim existingClaim = claimRepository.findById(idClaim)
-                .orElseThrow(() -> new IllegalArgumentException("Claim not found with this ID: " + idClaim));
-
-        // Update the properties of the existing claim with the values from the updated claim
-        existingClaim.setClaimPriority(claim.getClaimPriority());
-        existingClaim.setClaimStatus(claim.getClaimStatus());
-        existingClaim.setDateClaim(claim.getDateClaim());
-        existingClaim.setDescription(claim.getDescription());
-        existingClaim.setFeedBackEmployee(claim.isFeedBackEmployee());
-
-        return claimRepository.save(existingClaim);
+    public Claim updateClaim(Claim claim) {
+ return claimRepository.save(claim);
     }
 
     @Override
@@ -72,6 +62,7 @@ public class ClaimService implements IClaimService {
         Assert.notNull(currentUser, "User not found or unauthorized");
 
         claim.setUserClaim(currentUser);
+        claim.setClaimStatus(ClaimStatus.IN_PROGRESS);
         Claim savedClaim=claimRepository.save(claim);
 
         Role role = currentUser.getRole();
