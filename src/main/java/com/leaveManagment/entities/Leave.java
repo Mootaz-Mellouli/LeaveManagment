@@ -29,4 +29,5 @@ public class Leave {
     @ManyToOne
     private User user;
     private boolean isArchived;
+    private LeavePriority leavePriority;
 }

@@ -1,8 +1,8 @@
 package com.leaveManagment.services.Leave;
 
-import com.leaveManagment.entities.Leave;
-import com.leaveManagment.entities.LeaveStatus;
+import com.leaveManagment.entities.*;
 import com.leaveManagment.repositories.LeaveRepository;
+import com.sun.xml.bind.v2.TODO;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -28,6 +28,15 @@ public class LeaveServiceImp implements ILeaveService{
     }
     @Override
     public Leave addLeave(Leave leave) {
+        // TODO : number of days => demi-journéé actif seulement quand on choisit la meme date
+        User user = new User();
+       /* user.setFirstName("mootaz");
+        user.setLastName("mellouli");
+        leave.setUser(user);*/
+        leave.setLeaveStatus(LeaveStatus.IN_PROGRESS);
+        if (leave.getLeaveType() == LeaveType.CG_PAYE) {
+            leave.setLeavePriority(checkLeavePriorityCGPaye(user));
+        }
         return leaveRepository.save(leave);
     }
     @SneakyThrows
@@ -51,18 +60,13 @@ public class LeaveServiceImp implements ILeaveService{
     }
 
     @Override
-    public Boolean leaveResponse(int idLeave, LeaveStatus leaveStatus) {
-        Leave leave = leaveRepository.findById(idLeave).orElse(null);
-        if (leave != null) {
-            leave.setLeaveStatus(leaveStatus);
-            return true;
-        }
-        return false;
+    public List<Leave> getAllLeavesNotArchived() {
+        return leaveRepository.getLeavesByIsArchivedIsFalse();
     }
 
     @Override
-    public List<Leave> getAllLeavesNotArchived() {
-        return leaveRepository.getLeavesByIsArchivedIsFalse();
+    public List<Leave> getArchivedLeaves() {
+        return leaveRepository.getLeavesByIsArchivedIsTrue();
     }
 
     public void isLeaveArchived(int idLeave) throws Exception {
@@ -70,5 +74,47 @@ public class LeaveServiceImp implements ILeaveService{
         if (leave != null && leave.isArchived()) {
             throw new IllegalAccessException();
         }
+    }
+
+    public void calculConge(User user, Leave leave) {
+        // 2.5 jours par mois
+        // 30 jours max par an
+        // anciennete de salarié dans l'entreprise
+        // situation familial
+        // congé d'été => 24 jours max
+        // quand le congé approuvé la calendrier est mis a jour
+        float leaveBalance = user.getLeaveBalance();
+        LeavePriority leavePriority = getLeavePriority(leave.getLeaveType(), user);
+        if (leaveBalance > 0)
+        {
+
+
+        }
+    }
+
+    public void soldeConge() {
+        // TODO : shceduler a chaque fin d'annee remize a zero du solde
+    }
+
+    public LeavePriority getLeavePriority(LeaveType leaveType, User user)
+    {
+        switch(leaveType) {
+            case EVEN_FAM_DECES:
+            case CG_MALADIE:
+                return LeavePriority.HIGH;
+            case CG_MATERN:
+                if (user.getChildren() > 0)
+                    return LeavePriority.MEDIUM;
+            case CG_PATERN:
+                if (user.getChildren() > 0)
+                    return LeavePriority.MEDIUM;
+            default:
+                return LeavePriority.LOW;
+        }
+    }
+
+    public LeavePriority checkLeavePriorityCGPaye(User user) {
+        user.getTeamList();
+        return null;
     }
 }

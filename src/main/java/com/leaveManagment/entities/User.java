@@ -1,5 +1,6 @@
 package com.leaveManagment.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,10 +33,12 @@ public class User {
     private String phoneSecondary;
     private String email;
     private String password;
+    private int children;
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Leave> leaves;
-    @ManyToMany(mappedBy = "userList")
-    private List<Team> teamList;
+    @ManyToOne(mappedBy = "userList")
+    private Team team;
     @OneToMany(mappedBy = "user")
     private List<Claim> claim;
 }

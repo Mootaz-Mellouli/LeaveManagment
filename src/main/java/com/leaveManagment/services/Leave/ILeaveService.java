@@ -12,6 +12,6 @@ public interface ILeaveService {
     Leave updateLeave(Leave leave);
     void deleteLeave(int idLeave);
     List<Leave> getLeavesByUser(int idUser);
-    Boolean leaveResponse(int idLeave, LeaveStatus leaveStatus);
     List<Leave> getAllLeavesNotArchived();
+    List<Leave> getArchivedLeaves();
 }

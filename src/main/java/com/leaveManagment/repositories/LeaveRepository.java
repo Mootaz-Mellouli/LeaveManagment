@@ -9,4 +9,5 @@ import java.util.List;
 public interface LeaveRepository extends JpaRepository<Leave, Integer> {
 
     List<Leave> getLeavesByIsArchivedIsFalse();
+    List<Leave> getLeavesByIsArchivedIsTrue();
 }

@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/leave")
+@CrossOrigin
 public class LeaveController {
     private final ILeaveService leaveService;
     @GetMapping("/all")
@@ -36,4 +37,12 @@ public class LeaveController {
     public List<Leave> getAllLeavesNotArchived() {
         return leaveService.getAllLeavesNotArchived();
     }
+    @GetMapping("/archived")
+    public List<Leave> getArchivedLeaves() {
+        return leaveService.getArchivedLeaves();
+    }
+    /*@PutMapping("/response")
+    public Leave leaveResponse(Leave leave) {
+        return leaveService.leaveResponse(leave);
+    }*/
 }
