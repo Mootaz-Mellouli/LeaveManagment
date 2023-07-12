@@ -10,9 +10,10 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/leave")
+@CrossOrigin
 public class LeaveController {
     private final ILeaveService leaveService;
-    @GetMapping
+    @GetMapping("/all")
     public List<Leave> getAllLeaves() {
         return leaveService.getAllLeaves();
     }
@@ -32,4 +33,16 @@ public class LeaveController {
     public void deleteLeave(@PathVariable int idLeave) {
         leaveService.deleteLeave(idLeave);
     }
+    @GetMapping
+    public List<Leave> getAllLeavesNotArchived() {
+        return leaveService.getAllLeavesNotArchived();
+    }
+    @GetMapping("/archived")
+    public List<Leave> getArchivedLeaves() {
+        return leaveService.getArchivedLeaves();
+    }
+    /*@PutMapping("/response")
+    public Leave leaveResponse(Leave leave) {
+        return leaveService.leaveResponse(leave);
+    }*/
 }

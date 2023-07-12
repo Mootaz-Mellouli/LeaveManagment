@@ -35,6 +35,7 @@ public class User {
     private String password;
     private Boolean isArchive = false ;
     private LocalDate archiveDate ;
+    private int children;
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Leave> leaves;
