@@ -22,11 +22,12 @@ public class TeamServiceImp implements ITeamService{
 
     @Override
     public List<Team> retrieveAllTeams() {
-        return teamRepository.findAll();
+        return teamRepository.findByArchiveIsFalse();
     }
 
     @Override
     public Team addTeam(Team t) {
+        //t.setUser(userRepository.findById(t.getUser().getId()).orElse(null));
         return teamRepository.save(t);
     }
 
@@ -41,8 +42,11 @@ public class TeamServiceImp implements ITeamService{
     }
 
     @Override
-    public void deleteTeam(Integer idTeam) {
-        teamRepository.deleteById(idTeam);
+    public void archiveTeam(Integer idTeam) {
+        Team team = teamRepository.findById(idTeam).orElse(null);
+        Assert.notNull(team,"Team ne doit pas etre null");
+        team.setArchive(true);
+        teamRepository.save(team);
     }
 
     @Override

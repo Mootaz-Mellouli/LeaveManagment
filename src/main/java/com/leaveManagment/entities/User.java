@@ -44,4 +44,7 @@ public class User {
     @OneToMany(mappedBy = "userClaim")
     @JsonIgnore
     private List<Claim> claim;
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private Team team;
 }
