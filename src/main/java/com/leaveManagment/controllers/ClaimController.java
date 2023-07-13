@@ -21,6 +21,10 @@ public class ClaimController{
         claimService.deleteClaim(idClaim);
     }
 
+    @PutMapping("/claimchecked/{idC}/{idUser}")
+    public Boolean claimChecked(@PathVariable int idC, @PathVariable int idUser){
+       return claimService.claimChecked(idC,idUser);
+    }
     @PutMapping("/updateClaim/{id}")
     @CrossOrigin
     public Claim updateClaim(@PathVariable int id, @RequestBody Claim claim) {

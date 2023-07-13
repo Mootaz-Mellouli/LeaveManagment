@@ -23,7 +23,7 @@ public class Claim {
     private Date dateClaim;
     @Enumerated(EnumType.STRING)
     private ClaimStatus claimStatus;
-    private boolean feedBackEmployee;
+    private boolean claimLu;
     @ManyToOne
     private User userClaim;
 }

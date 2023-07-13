@@ -20,15 +20,24 @@ import java.util.List;
 public class ClaimService implements IClaimService {
 
     private final ClaimRepository claimRepository;
-    private final UserServiceImp userService;
     private final UserRepository userRepo;
     private final JavaMailSender javaMailSender;
 
-    /*@Override
-    public Claim addClaim(Claim claim) {
+    public Boolean claimChecked(int id, int idUser) {
+        Claim claim1 = claimRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Claim not found with this ID: " + id));
+        User user = userRepo.findById(idUser)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with this ID: " + idUser));
+        Role role = user.getRole();
 
-        return claimRepository.save(claim);
-    }*/
+        if (role.equals(Role.ADMIN) && claim1.getClaimStatus().equals(ClaimStatus.ON_HOLD)) {
+            claim1.setClaimStatus(ClaimStatus.ACCEPTED);
+            claimRepository.save(claim1); // Sauvegarde la réclamation mise à jour dans la base de données
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void deleteClaim(int idClaim) {
@@ -50,7 +59,7 @@ public class ClaimService implements IClaimService {
         claim1.setClaimPriority(claim.getClaimPriority());
         claim1.setDateClaim(claim.getDateClaim());
         claim1.setClaimStatus(claim.getClaimStatus());
-        claim1.setFeedBackEmployee(claim.isFeedBackEmployee());
+        claim1.setClaimLu(claim.isClaimLu());
         claim1.setUserClaim(claim.getUserClaim());
 
         return claimRepository.save(claim1);

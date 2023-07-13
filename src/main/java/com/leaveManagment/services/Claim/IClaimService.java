@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface IClaimService {
-    // public Claim addClaim(Claim claim);
+     public Boolean claimChecked(int id,int idUser);
     public void deleteClaim(int idClaim);
     public Claim updateClaim(int id, Claim claim);
      public List<Claim>  getClaimByPriority(ClaimPriority claimPriority);
