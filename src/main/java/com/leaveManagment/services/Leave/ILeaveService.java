@@ -10,7 +10,7 @@ import java.util.List;
 public interface ILeaveService {
     List<Leave> getAllLeaves();
     Leave getLeaveById(int idLeave);
-    Leave addLeave(Leave leave);
+    Leave addLeave(Leave leave, String matricule);
     Leave updateLeave(Leave leave);
     void deleteLeave(int idLeave);
     List<Leave> getLeavesByUser(int idUser);

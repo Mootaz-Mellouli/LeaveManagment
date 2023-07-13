@@ -54,6 +54,6 @@ public class SecurityConfig {
     }
     private static final String[] AUTH_WHITELIST = {
             // welcome test rest endpoints
-            "/api/auth/**","/user/**"
+            "/api/auth/**","/user/**","/leave/**"
     };
 }

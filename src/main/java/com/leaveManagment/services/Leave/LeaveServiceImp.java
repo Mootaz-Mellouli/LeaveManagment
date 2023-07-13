@@ -2,9 +2,13 @@ package com.leaveManagment.services.Leave;
 
 import com.leaveManagment.entities.*;
 import com.leaveManagment.repositories.LeaveRepository;
+import com.leaveManagment.repositories.UserRepository;
+import com.leaveManagment.services.User.IUserService;
+import com.leaveManagment.services.User.UserServiceImp;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -15,6 +19,9 @@ import java.util.List;
 @Transactional
 public class LeaveServiceImp implements ILeaveService{
     private final LeaveRepository leaveRepository;
+    private final UserServiceImp userService;
+    private final UserRepository userRepository;
+
     @Override
     public List<Leave> getAllLeaves() {
         return leaveRepository.findAll();
@@ -25,17 +32,27 @@ public class LeaveServiceImp implements ILeaveService{
         isLeaveArchived(idLeave);
         return leaveRepository.findById(idLeave).orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
+    @SneakyThrows
     @Override
-    public Leave addLeave(Leave leave) {
+    public Leave addLeave(Leave leave, String matricule) {
         // TODO : number of days => demi-journéé actif seulement quand on choisit la meme date
-        User user = new User();
-       /* user.setFirstName("mootaz");
-        user.setLastName("mellouli");
-        leave.setUser(user);*/
-        leave.setLeaveStatus(LeaveStatus.IN_PROGRESS);
-        if (leave.getLeaveType() == LeaveType.CG_PAYE) {
-            leave.setLeavePriority(checkLeavePriorityCGPaye(user));
+        // ne7sbou ken wakt el type congé solde
+        /*User user = userService.getCurrentUser2();
+        if ( user != null) {
+            leave.setUser(user);
+        }*/
+        User user = userRepository.findUserByMatricule(matricule).orElse(null);
+        if (user != null) {
+            leave.setUser(user);
         }
+        if (leave.getStartDate().after(leave.getEndDate()) || (leave.getEndDate().before(leave.getStartDate()))) {
+            throw new IllegalAccessException();
+        }
+        leave.setLeavePriority(getLeavePriority(leave.getLeaveType()));
+        leave.setLeaveStatus(LeaveStatus.IN_PROGRESS);
+        /*if (leave.getLeaveType() == LeaveType.CG_PAYE) {
+            leave.setLeavePriority(checkLeavePriorityCGPaye(user));
+        }*/
         return leaveRepository.save(leave);
     }
     @SneakyThrows
@@ -83,7 +100,7 @@ public class LeaveServiceImp implements ILeaveService{
         // congé d'été => 24 jours max
         // quand le congé approuvé la calendrier est mis a jour
         float leaveBalance = user.getLeaveBalance();
-        LeavePriority leavePriority = getLeavePriority(leave.getLeaveType(), user);
+        //LeavePriority leavePriority = getLeavePriority(leave.getLeaveType(), user);
         if (leaveBalance > 0)
         {
 
@@ -95,17 +112,16 @@ public class LeaveServiceImp implements ILeaveService{
         // TODO : shceduler a chaque fin d'annee remize a zero du solde
     }
 
-    public LeavePriority getLeavePriority(LeaveType leaveType, User user)
+    public LeavePriority getLeavePriority(LeaveType leaveType)
     {
+        // TODO : USER.getchildredn
         switch(leaveType) {
             case EVEN_FAM_DECES:
             case CG_MALADIE:
                 return LeavePriority.HIGH;
             case CG_MATERN:
-                if (user.getChildren() > 0)
                     return LeavePriority.MEDIUM;
             case CG_PATERN:
-                if (user.getChildren() > 0)
                     return LeavePriority.MEDIUM;
             default:
                 return LeavePriority.LOW;

@@ -1,4 +1,4 @@
-package com.leaveManagment.Config;
+package com.leaveManagment.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
