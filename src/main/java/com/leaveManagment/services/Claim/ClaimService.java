@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.mail.internet.MimeMessage;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -40,8 +41,19 @@ public class ClaimService implements IClaimService {
     }
 
     @Override
-    public Claim updateClaim(Claim claim) {
- return claimRepository.save(claim);
+    public Claim updateClaim(int id, Claim claim) {
+        Claim claim1 = claimRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Claim not found with id " + id));
+
+        // Update the claim fields with the values from the claim object
+        claim1.setDescription(claim.getDescription());
+        claim1.setClaimPriority(claim.getClaimPriority());
+        claim1.setDateClaim(claim.getDateClaim());
+        claim1.setClaimStatus(claim.getClaimStatus());
+        claim1.setFeedBackEmployee(claim.isFeedBackEmployee());
+        claim1.setUserClaim(claim.getUserClaim());
+
+        return claimRepository.save(claim1);
     }
 
     @Override
@@ -62,7 +74,7 @@ public class ClaimService implements IClaimService {
         Assert.notNull(currentUser, "User not found or unauthorized");
 
         claim.setUserClaim(currentUser);
-        claim.setClaimStatus(ClaimStatus.IN_PROGRESS);
+        claim.setClaimStatus(ClaimStatus.ON_HOLD);
         Claim savedClaim=claimRepository.save(claim);
 
         Role role = currentUser.getRole();

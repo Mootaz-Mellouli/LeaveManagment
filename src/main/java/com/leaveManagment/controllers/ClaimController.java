@@ -21,10 +21,10 @@ public class ClaimController{
         claimService.deleteClaim(idClaim);
     }
 
-    @PutMapping("/updateClaim")
+    @PutMapping("/updateClaim/{id}")
     @CrossOrigin
-    public Claim updateClaim(@RequestBody Claim claim) {
-        return claimService.updateClaim(claim);
+    public Claim updateClaim(@PathVariable int id, @RequestBody Claim claim) {
+        return claimService.updateClaim(id,claim);
     }
 
     @PostMapping("/addClaim")
