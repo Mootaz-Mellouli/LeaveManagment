@@ -41,15 +41,18 @@ public class LeaveServiceImp implements ILeaveService{
         if ( user != null) {
             leave.setUser(user);
         }*/
+        Boolean teamAvailability;
         User user = userRepository.findUserByMatricule(matricule).orElse(null);
         if (user != null) {
             leave.setUser(user);
+            leave.setTeamAvailability(checkTeamAvailability(user, leave));
         }
         if (leave.getStartDate().after(leave.getEndDate()) || (leave.getEndDate().before(leave.getStartDate()))) {
             throw new IllegalAccessException();
         }
         leave.setLeavePriority(getLeavePriority(leave.getLeaveType()));
         leave.setLeaveStatus(LeaveStatus.IN_PROGRESS);
+
         /*if (leave.getLeaveType() == LeaveType.CG_PAYE) {
             leave.setLeavePriority(checkLeavePriorityCGPaye(user));
         }*/
@@ -128,8 +131,22 @@ public class LeaveServiceImp implements ILeaveService{
         }
     }
 
-    public LeavePriority checkLeavePriorityCGPaye(User user) {
-        user.getTeamList();
-        return null;
+    public Boolean checkTeamAvailability(User user, Leave leave) {
+        Team team = user.getTeamUser();
+        List<User> userList = userRepository.findUsersByTeamUserAndLeavesStartDateGreaterThanAndLeavesEndDateLessThan(
+                team,
+                leave.getStartDate(),
+                leave.getEndDate()
+        );
+        System.out.println(userList.size());
+        float numberUsersByTeam = team.getUserList().size(); //5
+        int pourcentage = Math.round((30.0f * numberUsersByTeam) / 100.0f); // 1.5
+        System.out.println(numberUsersByTeam);
+        System.out.println(pourcentage);
+        if(userList.size() >= pourcentage) {
+            return false;
+        }
+        return true;
+        // get leaves by date start and debut => if akther mil 30% => ? dire non
     }
 }

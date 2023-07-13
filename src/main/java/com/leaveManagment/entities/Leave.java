@@ -29,4 +29,5 @@ public class Leave {
     private User user;
     private boolean isArchived;
     private LeavePriority leavePriority;
+    private Boolean teamAvailability;
 }

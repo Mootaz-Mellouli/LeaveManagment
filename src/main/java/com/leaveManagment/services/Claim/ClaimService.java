@@ -98,12 +98,12 @@ public class ClaimService implements IClaimService {
         int count = 0;
         for (Claim claim : allClaims) {
             User userClaim = claim.getUserClaim();
-            for (Team userTeam : userClaim.getTeamList()) {
+            /*for (Team userTeam : userClaim.getTeamList()) {
                 if (userTeam.getNameTeam().equals(team.getNameTeam())) {
                     count++;
                     break;
                 }
-            }
+            }*/
         }
         return count;
     }
