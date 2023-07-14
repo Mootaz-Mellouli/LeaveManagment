@@ -18,10 +18,11 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String eventTitle;
-    private Date dateEvent;
     @Enumerated(EnumType.STRING)
     private EventType eventType;
-    private String description;
+    private Date startDate;
+    private Date endDate;
+    private String details;
     private boolean archive;
     @ManyToOne
     private Team team;

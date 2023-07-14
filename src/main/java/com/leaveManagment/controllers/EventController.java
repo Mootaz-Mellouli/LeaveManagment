@@ -37,7 +37,7 @@ public class EventController {
     public void archiveEvent(@PathVariable("eventid") Integer eventId) {
         eventService.archiveEvent(eventId);
     }
-
+//    @Secured ()
     @PutMapping("/{eventid}/{teamid}")
     public void affectEventToTeam(@PathVariable("eventid") Integer eventid,@PathVariable("teamid") Integer teamid) {
          eventService.affectEventToTeam(eventid,teamid);
