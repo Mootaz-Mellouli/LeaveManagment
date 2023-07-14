@@ -8,6 +8,8 @@ import com.leaveManagment.services.User.UserServiceImp;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -17,6 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@EnableScheduling
 public class LeaveServiceImp implements ILeaveService{
     private final LeaveRepository leaveRepository;
     private final UserServiceImp userService;
@@ -60,8 +63,12 @@ public class LeaveServiceImp implements ILeaveService{
     }
     @SneakyThrows
     @Override
-    public Leave updateLeave(Leave leave) {
+    public Leave updateLeave(Leave leave, String matricule) {
         isLeaveArchived(leave.getId());
+        User user = userRepository.findUserByMatricule(matricule).orElse(null);
+        if (user != null) {
+            leave.setUser(user);
+        }
         return leaveRepository.save(leave);
     }
     @Override
@@ -74,7 +81,11 @@ public class LeaveServiceImp implements ILeaveService{
     }
 
     @Override
-    public List<Leave> getLeavesByUser(int idUser) {
+    public List<Leave> getLeavesByUser(String matricule) {
+        User user = userRepository.findUserByMatricule(matricule).orElse(null);
+        if (user != null) {
+            return leaveRepository.getLeavesByUserAndIsArchivedIsFalse(user);
+        }
         return null;
     }
 
@@ -111,8 +122,16 @@ public class LeaveServiceImp implements ILeaveService{
         }
     }
 
+    //@Scheduled(cron="0 0 8 1 1/1 ? *")
+    @Scheduled(fixedRate = 1000)
     public void soldeConge() {
+        System.out.println("balance updated");
         // TODO : shceduler a chaque fin d'annee remize a zero du solde
+        userRepository.findAll().forEach(user -> {
+            Float oldBalance = user.getLeaveBalance();
+            Float newBalance = oldBalance + 2;
+            user.setLeaveBalance(newBalance);
+        });
     }
 
     public LeavePriority getLeavePriority(LeaveType leaveType)
@@ -147,6 +166,5 @@ public class LeaveServiceImp implements ILeaveService{
             return false;
         }
         return true;
-        // get leaves by date start and debut => if akther mil 30% => ? dire non
     }
 }

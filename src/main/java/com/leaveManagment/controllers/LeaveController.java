@@ -28,9 +28,9 @@ public class LeaveController {
     public Leave addLeave(@RequestBody Leave leave,@PathVariable String matricule) {
         return leaveService.addLeave(leave,matricule);
     }
-    @PutMapping("/update")
-    public Leave updateLeave(@RequestBody Leave leave) {
-        return leaveService.updateLeave(leave);
+    @PutMapping("/update/{matricule}")
+    public Leave updateLeave(@RequestBody Leave leave,@PathVariable String matricule) {
+        return leaveService.updateLeave(leave, matricule);
     }
     @DeleteMapping("/delete/{idLeave}")
     public void deleteLeave(@PathVariable int idLeave) {
@@ -46,8 +46,9 @@ public class LeaveController {
     public List<Leave> getArchivedLeaves() {
         return leaveService.getArchivedLeaves();
     }
-    /*@PutMapping("/response")
-    public Leave leaveResponse(Leave leave) {
-        return leaveService.leaveResponse(leave);
-    }*/
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @GetMapping("/me/{matricule}")
+    public List<Leave> getLeavesByUser(@PathVariable String matricule) {
+        return leaveService.getLeavesByUser(matricule);
+    }
 }

@@ -11,4 +11,7 @@ public interface LeaveRepository extends JpaRepository<Leave, Integer> {
 
     List<Leave> getLeavesByIsArchivedIsFalse();
     List<Leave> getLeavesByIsArchivedIsTrue();
+
+    @Query("select l from Leave l where l.user = ?1 and l.isArchived = false")
+    List<Leave> getLeavesByUserAndIsArchivedIsFalse(User user);
 }

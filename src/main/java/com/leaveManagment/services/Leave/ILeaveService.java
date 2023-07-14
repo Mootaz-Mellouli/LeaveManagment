@@ -11,9 +11,9 @@ public interface ILeaveService {
     List<Leave> getAllLeaves();
     Leave getLeaveById(int idLeave);
     Leave addLeave(Leave leave, String matricule);
-    Leave updateLeave(Leave leave);
+    Leave updateLeave(Leave leave, String matricule);
     void deleteLeave(int idLeave);
-    List<Leave> getLeavesByUser(int idUser);
+    List<Leave> getLeavesByUser(String matricule);
     List<Leave> getAllLeavesNotArchived();
     List<Leave> getArchivedLeaves();
 }
